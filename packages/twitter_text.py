@@ -28,7 +28,7 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
     print(f"lang = {lang}")
 
     tweets = tweepy.Cursor(
-        api.search_tweets, q=query_term, tweet_mode="extended", lang=lang).items(5)   # OPT: compat, lang="en" / "zh"; 1
+        api.search_tweets, q=query_term, tweet_mode="extended", lang=lang).items(5)   # OPT: compat, lang="en" / "zh"; .items(1)
     return tweets
 
 
@@ -123,7 +123,7 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
 def get_refined_tweet_list(keyword=None, hashtag=None):
     import pandas as pd   # make dataframe, export csv
-    
+
     tweets = get_tweets(keyword, hashtag)
 
     refined_tweet_list = list()

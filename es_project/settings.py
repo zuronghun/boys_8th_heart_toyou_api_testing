@@ -43,7 +43,19 @@ INSTALLED_APPS = [
     'rest_framework',
     # CORS
     'corsheaders',
+    # crons
+    'django_cron',
 ]
+
+CRON_CLASSES = [
+    "tweets.cron.MyCronJob",
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
 
 MIDDLEWARE = [
     # CORS

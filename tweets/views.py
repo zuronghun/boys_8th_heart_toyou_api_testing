@@ -47,31 +47,31 @@ def tweet_list(request):
         return JsonResponse({'message': '{} Tweets were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def tweet_detail(request, pk):
-    # ... tweet = Tweet.objects.get(pk=pk)
-    # ...
-    # find tweet by pk (id)
-    try:
-        tweet = Tweet.objects.get(pk=pk)
-    except Tweet.DoesNotExist:
-        return JsonResponse({'message': 'The tweet does not exist'}, status=status.HTTP_404_NOT_FOUND)
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def tweet_detail(request, pk):
+#     # ... tweet = Tweet.objects.get(pk=pk)
+#     # ...
+#     # find tweet by pk (id)
+#     try:
+#         tweet = Tweet.objects.get(pk=pk)
+#     except Tweet.DoesNotExist:
+#         return JsonResponse({'message': 'The tweet does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-    # retrieve a single object
-    # find a single Tweet with an id
-    if request.method == 'GET':
-        tweet_serializer = TweetSerializers(tweet)
-        return JsonResponse(tweet_serializer.data)
+#     # retrieve a single object
+#     # find a single Tweet with an id
+#     if request.method == 'GET':
+#         tweet_serializer = TweetSerializers(tweet)
+#         return JsonResponse(tweet_serializer.data)
 
-    # update an object
-    # update a Tweet by the id in the request
-    elif request.method == 'PUT':
-        tweet_data = JSONParser().parse(request)
-        tweet_serializer = TweetSerializers(tweet, data=tweet_data)
-        if tweet_serializer.is_valid():
-            tweet_serializer.save()
-            return JsonResponse(tweet_serializer.data)
-        return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     # update an object
+#     # update a Tweet by the id in the request
+#     elif request.method == 'PUT':
+#         tweet_data = JSONParser().parse(request)
+#         tweet_serializer = TweetSerializers(tweet, data=tweet_data)
+#         if tweet_serializer.is_valid():
+#             tweet_serializer.save()
+#             return JsonResponse(tweet_serializer.data)
+#         return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -94,7 +94,9 @@ def tweet_detail(request, pk):
     # update an object
     # update a Tweet by the id in the request
     elif request.method == 'PUT':
+        print(f"HERE: request = {request}")
         tweet_data = JSONParser().parse(request)
+        print(f"HERE: tweet_data = {tweet_data}")
         tweet_serializer = TweetSerializers(tweet, data=tweet_data)
         if tweet_serializer.is_valid():
             tweet_serializer.save()
@@ -120,8 +122,11 @@ def tweet_list_published(request):
         return JsonResponse(tweets_serializers.data, safe=False) """
 
 # v1 api for getTweetByTerm
-@api_view(['GET', 'POST', 'DELETE'])
+
+
+@api_view(['GET', 'POST'])   # , 'DELETE'
 def tweet_list_v1(request):
+    # permission_classes = [AllowAny] # TODO
     # GET list of tweets, POST a new tweet, DELETE all tweets
 
     # retrieve objects (with condition)
@@ -158,7 +163,8 @@ def tweet_list_v1(request):
                 tweet_data["data"] = data
                 # print(f"tweet_data = {tweet_data}")   # D
 
-                tweet_serializer = TweetSerializers(data=tweet_data)
+                tweet_serializer = TweetSerializers(
+                    data=tweet_data)  # type: ignore
                 # print(f"tweet_serializer = {tweet_serializer}")   # D
 
                 if (tweet_serializer.is_valid()):
@@ -166,18 +172,40 @@ def tweet_list_v1(request):
                     return JsonResponse(tweet_serializer.data, status=status.HTTP_201_CREATED)
                 return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        tweets_serializers = TweetSerializers(tweets, many=True)
+            tweets_serializers = TweetSerializers(tweets, many=True)
 
-        # TODO: CAN't WORK: tweets_serializers.data["data"] / .get()
-        # print(f"tweets_serializers = {tweets_serializers}")
+            # TODO: CAN't WORK: tweets_serializers.data["data"] / .get()
+            # print(f"tweets_serializers = {tweets_serializers}")
 
-        # print(f'tweets = {tweets}')
-        # print(f'getattr(tweets, "data") = {getattr(tweets, "data")}')
-        return JsonResponse(tweets_serializers.data, safe=False)
-        # 'safe=False' for objects serialization
+            # print(f'tweets = {tweets}')
+            # print(f'getattr(tweets, "data") = {getattr(tweets, "data")}')
+            return JsonResponse(tweets_serializers.data, safe=False)
+            # 'safe=False' for objects serialization
 
+        else:
+            for tweet in tweets:
+                # refresh & update single tweet by its term
+                print("=========================")
+                term = getattr(tweet, "term")   # OPT: tweet["term"]
+
+                tweet_data = dict()
+                # data = {"num666": 123666}
+                data = get_tweet_text(None, term, "ja")
+                tweet_data["term"] = term
+                tweet_data["data"] = data
+
+                # serialize & save into db
+                tweet_serializer = TweetSerializers(
+                    tweet, data=tweet_data)  # type: ignore
+                # tweet_serializer.
+                if (tweet_serializer.is_valid()):
+                    tweet_serializer.save()
+
+            return JsonResponse({'message': 'All tweets were updated by term successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 # _v1 Reusable / small function(s)
+
+
 def get_tweet_text(keyword=None, hashtag=None, lang=None):   # hashtag=アンスタ
 
     from packages.twitter_text import get_text_w_title
