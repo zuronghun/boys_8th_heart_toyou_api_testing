@@ -31,3 +31,19 @@
   - describe tables
 - SELECT \* FROM django_migrations;
   - show all data in this table
+
+Cron job command need add to crontab
+
+- crontab -e
+  open crontab in vi
+  _/1 _ \* \* _ cd /Users/zrhun/Desktop/Coding/happyelementbe && /Users/zrhun/anaconda3/bin/python3 manage.py runcrons >> /Users/zrhun/Desktop/Coding/happyelementbe/tweets/log.txt 2>&1
+  _/1 \* \* \* _ cd /Users/zrhun/Desktop/Coding/happyelementbe && /Users/zrhun/anaconda3/envs/wordcloud/bin/python3.10 manage.py runcrons >> /Users/zrhun/Desktop/Coding/happyelementbe/tweets/log.txt 2>&1
+  _/1 \* \* \* \* cd /Users/zrhun/Desktop/Coding/happyelementbe/tweets && /Users/zrhun/anaconda3/bin/python3 testing.py >> /Users/zrhun/Desktop/Coding/happyelementbe/tweets/log.txt 2>&1
+
+libs:
+
+- pip install django_cron
+  - install django_cron lib
+- pip freeze > requirements.txt
+  - export all libs into text file
+- python3 manage.py runcrons "tweets.cron.MyCronJob"

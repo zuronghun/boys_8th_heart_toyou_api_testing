@@ -47,6 +47,19 @@ def get_text(keyword=None, hashtag=None, lang=None):
 # TODO: rename "title" to "content"
 def get_text_w_title(keyword=None, hashtag=None, lang=None):
     import fugashi
+    from wordcloud import STOPWORDS
+
+    # create stopword list:
+    stopwordSet = set(STOPWORDS)   # maybe can set at outer level
+    if lang == "en":
+        stopwordSet.update(["drink", "now", "wine", "flavor", "flavors"])
+    elif lang == "ja":
+        stopwordSet.update(['てる', 'いる', 'なる', 'れる', 'する', 'ある', 'こと', 'これ', 'さん', 'して',   # OPT: stopwords.update()
+                            'くれる', 'やる', 'くださる', 'そう', 'せる', 'した',  '思う',
+                            'それ', 'ここ', 'ちゃん', 'くん', '', 'て', 'に', 'を', 'は', 'の', 'が', 'と', 'た', 'し', 'で',
+                            'ない', 'も', 'な', 'い', 'か', 'ので', 'よう', '', 'れ', 'さ', 'なっ'])
+    # print("stopwordSet =", stopwordSet)
+
     """ tweets = get_tweets(keyword, hashtag, lang)
 
     text = ""
@@ -88,10 +101,15 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
         for word in words:
             print(word)
+
+            if (word in stopwordSet):
+                print(f"this word {word} is a stopword")
+                continue
+
             # count_dict[word] = ((word in count_dict) ? count_dict.get(word) : 0) + 1
             count = 0   # counter start from 0 by default
-            titles = list()
-            ids = list()
+            titles = set()   # list()
+            ids = set()   # list()
 
             if (word in count_dict):
                 count = count_dict.get(word)
