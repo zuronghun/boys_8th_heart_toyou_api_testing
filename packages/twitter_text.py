@@ -118,7 +118,6 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
             # print("=====")
             # print(f"BFR: titles = {titles}")
-            print("=================================================================")
             # avoid to add duplicate data (can't use set in JSONObject())
             if text not in titles:
                 '''print(f"(text not in titles) = {(text not in titles)}")
