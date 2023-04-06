@@ -97,21 +97,21 @@ def heart_list_v1(request, total=None):
         return JsonResponse(heart_serializer.data)
 
     elif request.method == 'POST':
-        print("=== HERE ===")
+        """print("=== HERE ===")
         print(f"request = {request}")
-        print(f"total = {total}")
+        print(f"total = {total}")"""
 
         if total is not None:
             # TODO: heart_data = {"total": total}
             heart_data = dict()
             currTotal = getattr(heart, "total")
             heart_data["total"] = currTotal + int(total)
-            print(f"heart_data = {heart_data}")
+            # print(f"heart_data = {heart_data}")
 
             # serialize & save into db
             heart_serializer = HeartSerializers(
                 heart, data=heart_data)   # type: ignore
-            print(f"heart_serializer = {heart_serializer}")
+            # print(f"heart_serializer = {heart_serializer}")
 
             if (heart_serializer.is_valid()):
                 heart_serializer.save()
