@@ -185,7 +185,7 @@ def tweet_list_v1(request):
         else:
             for tweet in tweets:
                 # refresh & update single tweet by its term
-                print("=========================")
+                print("=== cron job is auto running ===")
                 term = getattr(tweet, "term")   # OPT: tweet["term"]
 
                 tweet_data = dict()
