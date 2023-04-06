@@ -16,7 +16,7 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
     # creating an API
     api = tweepy.API(auth)
 
-    print("\n=== tweets ===")
+    # print("\n=== tweets ===")
     # query term
     if keyword is not None:
         query_term = keyword
@@ -24,11 +24,11 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
         query_term = "#" + hashtag
     else:   # keyword is None & hashtag is None:
         query_term = "#VaccinationDrive"
-    print(f"query_term = {query_term}")
-    print(f"lang = {lang}")
+    # print(f"query_term = {query_term}")
+    # print(f"lang = {lang}")
 
     tweets = tweepy.Cursor(
-        api.search_tweets, q=query_term, tweet_mode="extended", lang=lang).items(2)   # OPT: compat, lang="en" / "zh"; .items(1) // 5
+        api.search_tweets, q=query_term, tweet_mode="extended", lang=lang).items(5)   # OPT: compat, lang="en" / "zh"; .items(1) // 2
     return tweets
 
 
@@ -37,9 +37,9 @@ def get_text(keyword=None, hashtag=None, lang=None):
 
     text = ""
     for tweet in tweets:
-        print(f"IMPORTANT: tweet = {tweet}")
+        # print(f"IMPORTANT: tweet = {tweet}")
         text += tweet._json["full_text"]
-        print("text:", text)
+        # print("text:", text)
 
     return text
 
@@ -64,13 +64,13 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
     text = ""
     for tweet in tweets:
-        print(f"IMPORTANT: tweet = {tweet}")
+        # print(f"IMPORTANT: tweet = {tweet}")
         text += tweet._json["full_text"]
-        print("text:", text) """
+        # print("text:", text) """
 
     tweets = get_tweets(keyword, hashtag, lang)
     # tweets = ["aaa bbb ccc", "bbb ccc ddd", "eee fff ggg"]
-    print(f"tweets = {tweets}")
+    # print(f"tweets = {tweets}")
 
     count_dict = dict()
     titles_dict = dict()
@@ -78,11 +78,11 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
     ids_dict = dict()
 
     for tweet in tweets:
-        """ print(f"tweet = {tweet}")   # D
-        print(f"tweet._json = {tweet._json}")
-        print(f"tweet._json['full_text'] = {tweet._json['full_text']}")
-        print(f"tweet.text = {tweet.text}")
-        print(f"tweet.id = {tweet.id}") """
+        """ # print(f"tweet = {tweet}")   # D
+        # print(f"tweet._json = {tweet._json}")
+        # print(f"tweet._json['full_text'] = {tweet._json['full_text']}")
+        # print(f"tweet.text = {tweet.text}")
+        # print(f"tweet.id = {tweet.id}") """
 
         tweet._json["full_text"]
         text = tweet._json["full_text"]
@@ -93,17 +93,17 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
         tagger = fugashi.Tagger()
         words = [word.surface for word in tagger(text)]
 
-        print(text)
-        print(words)
+        # print(text)
+        # print(words)
 
         # if (word not in count_dict)
         # count_dict.
 
         for word in words:
-            print(word)
+            # print(word)
 
             if (word in stopwordSet):
-                print(f"this word {word} is a stopword")
+                # print(f"this word {word} is a stopword")
                 continue
 
             # count_dict[word] = ((word in count_dict) ? count_dict.get(word) : 0) + 1
@@ -116,24 +116,24 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
                 titles = titles_dict.get(word)
                 ids = ids_dict.get(word)
 
-            print("=====")
-            print(f"BFR: titles = {titles}")
+            # print("=====")
+            # print(f"BFR: titles = {titles}")
             titles.append(text)   # OPT: add
             ids.append(id)   # OPT: add
-            print(f"AFR: titles = {titles}")
+            # print(f"AFR: titles = {titles}")
 
             count_dict[word] = count + 1
             titles_dict[word] = titles
             ids_dict[word] = ids
-            print(f"count_dict = {count_dict}")
-            print(f"titles_dict = {titles_dict}")
+            # print(f"count_dict = {count_dict}")
+            # print(f"titles_dict = {titles_dict}")
 
             out_dict = {
                 "count": count_dict,
                 "sample_title": titles_dict,
                 "ids": ids_dict
             }
-            print(f"out_dict = {out_dict}")
+            # print(f"out_dict = {out_dict}")
 
     # return text
     return out_dict
@@ -146,9 +146,9 @@ def get_refined_tweet_list(keyword=None, hashtag=None):
 
     refined_tweet_list = list()
     for tweet in tweets:
-        print(f"IMPORTANT: tweet = {tweet}")
+        # print(f"IMPORTANT: tweet = {tweet}")
         text = tweet._json["full_text"]
-        print("text:", text)
+        # print("text:", text)
 
         refined_tweet = {'text': text,
                          'favorite_count': tweet.favorite_count,
@@ -156,12 +156,12 @@ def get_refined_tweet_list(keyword=None, hashtag=None):
                          'created_at': tweet.created_at}
 
         refined_tweet_list.append(refined_tweet)
-        print("refined_tweet_list:", refined_tweet_list)
+        # print("refined_tweet_list:", refined_tweet_list)
 
     # make a dataframe of tweets with columns representing the different attributes of tweet
     df = pd.DataFrame(refined_tweet_list)
     df.to_csv('refined_tweets.csv')
-    print("df:", df)
+    # print("df:", df)
 
     # return df
     return refined_tweet_list
