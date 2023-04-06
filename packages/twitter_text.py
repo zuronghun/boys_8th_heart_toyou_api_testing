@@ -108,8 +108,8 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
             # count_dict[word] = ((word in count_dict) ? count_dict.get(word) : 0) + 1
             count = 0   # counter start from 0 by default
-            titles = set()   # list()
-            ids = set()   # list()
+            titles = list()   # OPT: set()
+            ids = list()   # OPT: set()
 
             if (word in count_dict):
                 count = count_dict.get(word)
@@ -118,8 +118,8 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
             print("=====")
             print(f"BFR: titles = {titles}")
-            titles.append(text)
-            ids.append(id)
+            titles.append(text)   # OPT: add
+            ids.append(id)   # OPT: add
             print(f"AFR: titles = {titles}")
 
             count_dict[word] = count + 1
