@@ -118,8 +118,16 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
             # print("=====")
             # print(f"BFR: titles = {titles}")
-            titles.append(text)   # OPT: add
-            ids.append(id)   # OPT: add
+            print("=================================================================")
+            # avoid to add duplicate data (can't use set in JSONObject())
+            if text not in titles:
+                '''print(f"(text not in titles) = {(text not in titles)}")
+                print(f"text = {text}")
+                print(f"titles = {titles}")'''
+                titles.append(text)   # OPT: add
+            # avoid to add duplicate data (can't use set in JSONObject())
+            if id not in ids:
+                ids.append(id)   # OPT: add
             # print(f"AFR: titles = {titles}")
 
             count_dict[word] = count + 1
