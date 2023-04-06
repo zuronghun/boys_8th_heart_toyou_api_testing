@@ -12,6 +12,8 @@
   - enter into (chg dir) working directory
 - pip install django-cors-headers
   - add cors to header (or else BE API can't be used in FE)
+- python manage.py startapp customers
+  - creating a Django app
 - python manage.py makemigrations (optional: app)
   - detect newly made change(s) to make migrations
 - python manage.py migrate (optional: app)
@@ -39,6 +41,10 @@ Cron job command need add to crontab
   _/1 _ \* \* _ cd /Users/zrhun/Desktop/Coding/happyelementbe && /Users/zrhun/anaconda3/bin/python3 manage.py runcrons >> /Users/zrhun/Desktop/Coding/happyelementbe/tweets/log.txt 2>&1
   _/1 \* \* \* _ cd /Users/zrhun/Desktop/Coding/happyelementbe && /Users/zrhun/anaconda3/envs/wordcloud/bin/python3.10 manage.py runcrons >> /Users/zrhun/Desktop/Coding/happyelementbe/tweets/log.txt 2>&1
   _/1 \* \* \* \* cd /Users/zrhun/Desktop/Coding/happyelementbe/tweets && /Users/zrhun/anaconda3/bin/python3 testing.py >> /Users/zrhun/Desktop/Coding/happyelementbe/tweets/log.txt 2>&1
+
+  - `*/1 * * * * cd /Users/zrhun/Desktop/Coding/happyelementbe && /Users/zrhun/anaconda3/envs/wordcloud/bin/python3.10 manage.py runcrons >> /Users/zrhun/Desktop/Coding/happyelementbe/tweets/log.txt 2>&1`
+
+  - `*/1 * * * * cd ~/happyelementbe && source env/bin/activate && python manage.py runcrons >> tweets/log.txt 2>&1`
 
 libs:
 
