@@ -200,8 +200,9 @@ def tweet_list_v1(request):
                 # tweet_serializer.
                 if (tweet_serializer.is_valid()):
                     tweet_serializer.save()
+                    return JsonResponse({'message': 'All tweets were updated by term successfully!'}, status=status.HTTP_204_NO_CONTENT)
+                return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return JsonResponse({'message': 'All tweets were updated by term successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 # _v1 Reusable / small function(s)
 
