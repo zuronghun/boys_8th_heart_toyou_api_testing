@@ -197,10 +197,10 @@ def tweet_list_v1(request):
                 # serialize & save into db
                 tweet_serializer = TweetSerializers(
                     tweet, data=tweet_data)  # type: ignore
-                # tweet_serializer.
+
                 if (tweet_serializer.is_valid()):
                     tweet_serializer.save()
-                    return JsonResponse({'message': 'All tweets were updated by term successfully!'}, status=status.HTTP_204_NO_CONTENT)
+                    return JsonResponse({'message': 'All tweets are updated by term successfully!'}, status=status.HTTP_204_NO_CONTENT)
                 return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
