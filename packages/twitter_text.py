@@ -57,7 +57,9 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
         stopwordSet.update(['てる', 'いる', 'なる', 'れる', 'する', 'ある', 'こと', 'これ', 'さん', 'して',   # OPT: stopwords.update()
                             'くれる', 'やる', 'くださる', 'そう', 'せる', 'した',  '思う',
                             'それ', 'ここ', 'ちゃん', 'くん', '', 'て', 'に', 'を', 'は', 'の', 'が', 'と', 'た', 'し', 'で',
-                            'ない', 'も', 'な', 'い', 'か', 'ので', 'よう', '', 'れ', 'さ', 'なっ'])
+                            'ない', 'も', 'な', 'い', 'か', 'ので', 'よう', '', 'れ', 'さ', 'なっ',
+                            # from ng col (https://docs.google.com/spreadsheets/d/1RF3nzLGfaQeENwMXYQOR3Dw6bH7l7dJ9a6IPlbYW6l8/edit#gid=235398883)
+                            "SEX", "ちんこ", "うんこ", "ちんちん", "天城燐音であれば、「天城燐音」「天城」「燐音」など自身の名前は絶対1番ワードクラウド上で大きく表示されてしまうはずなので、各キャラクター自身の名前は表示しないようにしたいです", "あんスタ", "あんさんぶるスターズ"])
     # print("stopwordSet =", stopwordSet)
 
     """ tweets = get_tweets(keyword, hashtag, lang)
