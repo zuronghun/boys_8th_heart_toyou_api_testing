@@ -102,10 +102,10 @@ def heart_list_v1(request, total=None):
         print(f"total = {total}")"""
 
         if total is not None:
-            # TODO: heart_data = {"total": total}
-            heart_data = dict()
             currTotal = getattr(heart, "total")
-            heart_data["total"] = currTotal + int(total)
+            """heart_data = dict()
+            heart_data["total"] = currTotal + int(total)"""
+            heart_data = {"total": currTotal + int(total)}   # ditto
             # print(f"heart_data = {heart_data}")
 
             # serialize & save into db
