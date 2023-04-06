@@ -28,7 +28,7 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
     print(f"lang = {lang}")
 
     tweets = tweepy.Cursor(
-        api.search_tweets, q=query_term, tweet_mode="extended", lang=lang).items(5)   # OPT: compat, lang="en" / "zh"; .items(1)
+        api.search_tweets, q=query_term, tweet_mode="extended", lang=lang).items(2)   # OPT: compat, lang="en" / "zh"; .items(1) // 5
     return tweets
 
 
