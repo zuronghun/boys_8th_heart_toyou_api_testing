@@ -22,4 +22,5 @@ from django.urls import re_path
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^', include('tweets.urls')),
+    re_path(r'^', include('hearts.urls')),
 ]

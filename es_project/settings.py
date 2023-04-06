@@ -37,14 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Tweets application
-    'tweets.apps.TweetsConfig',
     # Django REST framework
     'rest_framework',
     # CORS
     'corsheaders',
     # crons
     'django_cron',
+    # Tweets application
+    'tweets.apps.TweetsConfig',
+    # Hearts application
+    'hearts.apps.HeartsConfig',
 ]
 
 CRON_CLASSES = [
