@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1y1@%&veh2%y9frx5$_0_=pxn65bbse)m+q@64j0br5q!%&v3b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']   # OPT: []
 
 
 # Application definition
@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'esdb2',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': 'postgres',   # opt: 123
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }
