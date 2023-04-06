@@ -78,20 +78,20 @@ def heart_detail(request, pk):
         heart.delete()
         return JsonResponse({'message': 'Heart was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
-# v1 api for getHeartByTerm
+# v1 api for getHeart
 
 
 @api_view(['GET', 'POST'])
 def heart_list_v1(request, total=None):
-    pk = 1   # assume only one data
     # find heart by pk (id)
+    # find a single Heart with id 1
+    pk = 1   # assume only one data
     try:
         heart = Heart.objects.get(pk=pk)
     except Heart.DoesNotExist:
         return JsonResponse({'message': 'The heart does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-    # retrieve a single object
-    # find a single Heart with an id
+    # retrieve the first object
     if request.method == 'GET':
         heart_serializer = HeartSerializers(heart)
         return JsonResponse(heart_serializer.data)
