@@ -131,10 +131,13 @@ def tweet_list_v1(request):
 
     # retrieve objects (with condition)
     # retrieve all Tweets / find by term from PostgreSQL database
-    if request.method == 'GET':
-        tweets = Tweet.objects.all()
+    tweets = Tweet.objects.all()
+    if request.method == 'POST':
+        tweet_data = JSONParser().parse(request)
+        term = tweet_data['term']
+        """ print(f"tweet_data = {tweet_data}")
+        print(f"tweet_data['term'] = {tweet_data['term']}") """
 
-        term = request.GET.get('term', None)
         if term is not None:
             # complate value (exactly same), else recreate new obj
             # OPT: term__icontains=term
@@ -182,26 +185,27 @@ def tweet_list_v1(request):
             return JsonResponse(tweets_serializers.data, safe=False)
             # 'safe=False' for objects serialization
 
-        else:
-            for tweet in tweets:
-                # refresh & update single tweet by its term
-                print("=== cron job is auto running ===")
-                term = getattr(tweet, "term")   # OPT: tweet["term"]
+    elif request.method == 'GET':
+        term = request.GET.get('term', None)
+        for tweet in tweets:
+            # refresh & update single tweet by its term
+            print("=== cron job is auto running ===")
+            term = getattr(tweet, "term")   # OPT: tweet["term"]
 
-                tweet_data = dict()
-                # data = {"num666": 123666}
-                data = get_tweet_text(None, term, "ja")
-                tweet_data["term"] = term
-                tweet_data["data"] = data
+            tweet_data = dict()
+            # data = {"num666": 123666}
+            data = get_tweet_text(None, term, "ja")
+            tweet_data["term"] = term
+            tweet_data["data"] = data
 
-                # serialize & save into db
-                tweet_serializer = TweetSerializers(
-                    tweet, data=tweet_data)  # type: ignore
+            # serialize & save into db
+            tweet_serializer = TweetSerializers(
+                tweet, data=tweet_data)  # type: ignore
 
-                if (tweet_serializer.is_valid()):
-                    tweet_serializer.save()
-                    return JsonResponse({'message': 'All tweets are updated by term successfully!'}, status=status.HTTP_204_NO_CONTENT)
-                return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if (tweet_serializer.is_valid()):
+                tweet_serializer.save()
+                return JsonResponse({'message': 'All tweets are updated by term successfully!'}, status=status.HTTP_204_NO_CONTENT)
+            return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # _v1 Reusable / small function(s)
