@@ -124,43 +124,30 @@ def tweet_list_published(request):
 # v1 api for getTweetByTerm
 
 
-@api_view(['GET', 'POST'])   # , 'DELETE'
+@api_view(['POST', 'GET'])
 def tweet_list_v1(request):
+    # POST -> find by term; GET -> do refetch the data (cron job)
     # permission_classes = [AllowAny] # TODO
-    # GET list of tweets, POST a new tweet, DELETE all tweets
 
-    # retrieve objects (with condition)
-    # retrieve all Tweets / find by term from PostgreSQL database
+    # retrieve all Tweets from PostgreSQL database
     tweets = Tweet.objects.all()
     if request.method == 'POST':
         tweet_data = JSONParser().parse(request)
-        term = tweet_data['term']
-        """ print(f"tweet_data = {tweet_data}")
-        print(f"tweet_data['term'] = {tweet_data['term']}") """
+        term = tweet_data['term']   # OPT = あんスタ, あんスタウェルカム祭, はじめてさんいらっしゃ〜い
+        # print(f"term = {term}")   # D
 
         if term is not None:
-            # complate value (exactly same), else recreate new obj
-            # OPT: term__icontains=term
-            tweets = tweets.filter(term=term)
+            # chk if got this complete value (exactly same), else create a new Tweet object and save it
+            """tweet = tweets.filter(term=term)   # OPT: term__icontains=term
 
-            # if empty, then create a new obj
-            # IN
-            # print(f"tweets = {tweets}")
-            # print(f"tweets.__sizeof__ = {tweets.__sizeof__}")
-            # print(f"len(tweets) = {len(tweets)}")
-            # print(f"term = {term}")
-            # OUT
-            # tweets = <QuerySet []>
-            # tweets.__sizeof__ = <built-in method __sizeof__ of QuerySet object at 0x7fd6dd9105e0>
-            # len(tweets) = 0
-            # term = あんスタ
-            if len(tweets) < 1:
-                # create a new object
-                # create and save a new Tweet
+            # if empty, means no found this data
+            if len(tweet) < 1:"""
 
-                # tweet_data = JSONParser().parse(request)
+            # find tweet by term
+            try:
+                tweet = Tweet.objects.get(term=term)
+            except Tweet.DoesNotExist:
                 tweet_data = dict()
-                # OPT: #あんスタ, #あんスタウェルカム祭, #はじめてさんいらっしゃ〜い
                 data = get_tweet_text(None, term, "ja")
                 tweet_data["term"] = term
                 tweet_data["data"] = data
@@ -175,15 +162,13 @@ def tweet_list_v1(request):
                     return JsonResponse(tweet_serializer.data, status=status.HTTP_201_CREATED)
                 return JsonResponse(tweet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            tweets_serializers = TweetSerializers(tweets, many=True)
+            # return single data only (no array w multiple data)
+            # tweets_serializers = TweetSerializers(tweets, many=True)
+            tweet_serializer = TweetSerializers(tweet)
 
-            # TODO: CAN't WORK: tweets_serializers.data["data"] / .get()
-            # print(f"tweets_serializers = {tweets_serializers}")
-
-            # print(f'tweets = {tweets}')
-            # print(f'getattr(tweets, "data") = {getattr(tweets, "data")}')
-            return JsonResponse(tweets_serializers.data, safe=False)
-            # 'safe=False' for objects serialization
+            # return single data only (no array w multiple data)
+            # return JsonResponse(tweets_serializers.data, safe=False)
+            return JsonResponse(tweet_serializer.data)
 
     elif request.method == 'GET':
         term = request.GET.get('term', None)
