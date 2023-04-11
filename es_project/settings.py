@@ -102,7 +102,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'es_project.wsgi.application'
+WSGI_APPLICATION = 'happyelementbe.wsgi.application'
 
 
 # Database
