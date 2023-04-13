@@ -8,11 +8,5 @@ class TweetSerializers(serializers.ModelSerializer):
         model = Tweet
         fields = ('id',
                   'term',
-                  'data')
-
-
-# class TweetDataSerializers(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Tweet
-#         fields = ('data')
+                  'data',
+                  'prev_data')
