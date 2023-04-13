@@ -2,7 +2,9 @@
 import tweepy   # extract tweets from Twitter
 import math   # ceil & floor num
 
-def main(term=None, number=None, lang=None):   # params: term is word without hashtag, request number, language used
+
+# params: term is word without hashtag, request number, language used
+def main(term=None, number=None, lang=None):
     # set default value
     if term is None:
         term = '氷鷹北斗'
@@ -38,10 +40,11 @@ def main(term=None, number=None, lang=None):   # params: term is word without ha
         api.search_tweets, q=hashtag, tweet_mode="extended", lang=lang).items(math.ceil(item_num))   # OPT: compat, lang="en" / "zh"; .items(1)
     # out += tweets
     # get content & id col data only
-    for tweet in tweets:
+    for tweet in tweets:   # TODO: remove redundant
         data = {}
-        data['content'] = tweet._json["full_text"]   # tweet['content']
-        data['id'] = tweet._json["id_str"]   # tweet['id']
+        # OPT: tweet['content']
+        data['content'] = tweet._json["full_text"]   # OPT: tweet['content']
+        data['id'] = tweet._json["id_str"]   # OPT: tweet['id']
         out.append(data)
     # print(f"hashtag: tweets = {tweets}")   # D
 
@@ -52,8 +55,7 @@ def main(term=None, number=None, lang=None):   # params: term is word without ha
     # get content & id col data only
     for tweet in tweets:
         data = {}
-        # OPT: tweet['content']
-        data['content'] = tweet._json["full_text"]
+        data['content'] = tweet._json["full_text"]   # OPT: tweet['content']
         data['id'] = tweet._json["id_str"]   # OPT: tweet['id']
         out.append(data)
     # print(f"word: tweets = {tweets}")   # D
