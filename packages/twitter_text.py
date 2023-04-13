@@ -28,9 +28,11 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
         lib = "snscrape"
         from packages.scrape_tweet_by_snscrape import main
         out = main(word, request_num)
-    print(f"=== lib used: {lib} ===")
+    # print(f"=== lib used: {lib} ===")   # D
 
-    output_filename = query_term.replace(" ", "_") + "_" + lib + ".txt"
+    # TODO: create a new folder, namely tweets_backup (if it is no exist yet)
+    output_filename = "tweets_backup/" + \
+        word.replace(" ", "_") + "_" + lib + ".txt"   # OPT: .json
     # print(f"=== create file: {output_filename} ===")   # D
     with open(output_filename, 'w') as f:
         # print(f"out = {out}")   # D
@@ -39,7 +41,7 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
         f.write('\n')
         f.flush()
 
-    print(f"OUT: out = {out}")
+    # print(f"OUT: out = {out}")   # D
     return out
 
 
@@ -100,7 +102,7 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
         # get text & id
         text = tweet["content"]
         id = tweet["id"]
-        print(f"HERE: text = {text}")
+        # print(f"HERE: text = {text}")
 
         # words = text.split()   // ONLY work well in en
         # The Tagger object holds state about the dictionary.
