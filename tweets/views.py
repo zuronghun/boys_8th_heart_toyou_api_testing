@@ -176,8 +176,8 @@ def tweet_list_v1(request):
         for tweet in tweets:
             # refresh & update single tweet by its term
             term = getattr(tweet, "term")   # OPT: tweet["term"]
-            # print(f"tweet = {tweet}")
-            print(f"term = {term}")
+            """ # print(f"tweet = {tweet}")   # D
+            print(f"term = {term}") """
 
             tweet_data = dict()
             # data = {"num666": 123666}
