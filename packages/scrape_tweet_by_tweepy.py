@@ -34,8 +34,8 @@ def main(term=None, number=None, lang=None):
     # print("\n=== tweets ===")
     # get tweet by hashtag
     item_num = number / 2
-    print(f"hashtag: math.ceil(item_num) = {math.ceil(item_num)}")
-    print(f"word: math.floor(item_num) = {math.floor(item_num)}")
+    """ print(f"hashtag: math.ceil(item_num) = {math.ceil(item_num)}")   # D
+    print(f"word: math.floor(item_num) = {math.floor(item_num)}") """
     tweets = tweepy.Cursor(
         api.search_tweets, q=hashtag, tweet_mode="extended", lang=lang).items(math.ceil(item_num))   # OPT: compat, lang="en" / "zh"; .items(1)
     # out += tweets
@@ -50,7 +50,7 @@ def main(term=None, number=None, lang=None):
 
     # get tweet by word
     tweets = tweepy.Cursor(
-        api.search_tweets, q=term, tweet_mode="extended", lang=lang).items(math.floor(item_num))   # OPT: compat, lang="en" / "zh"; .items(1)
+        api.search_tweets, q=term, tweet_mode="extended", lang=lang).items(math.floor(item_num))   # OPT: compat, lang="en" / "zh"; .items(1) // 2, 5
     # out += tweets
     # get content & id col data only
     for tweet in tweets:
