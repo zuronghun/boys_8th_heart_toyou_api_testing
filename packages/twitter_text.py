@@ -1,22 +1,5 @@
+# search 25 tweets by hashtag & 25 by word (if request_num = 50)
 def get_tweets(keyword=None, hashtag=None, lang=None):
-    # import package
-    import tweepy   # extract tweets from Twitter
-
-    # set credentials
-    consumer_key = "q1BwFxmCRcLt21Wwx33zXqQVR"   # same as api key
-    # same as api secret
-    consumer_secret = "rjMIMoYhoOVg6K1wnFEi8vtMtn64hPZChHXDh8JxmcR0Sx9Myg"
-    access_key = "1267374302971617282-IB4B6Lfi1QxitPTzw4h5wRRxjjRI6a"
-    access_secret = "3iRqJsKLExVAj4tcUoQ0pw3yRAhpBEM1jpcWBvPLzGCfj"
-
-    # Twitter authentication
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_key, access_secret)
-
-    # creating an API
-    api = tweepy.API(auth)
-
-    # print("\n=== tweets ===")
     # query term
     if keyword is not None:
         query_term = keyword
@@ -27,9 +10,37 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
     # print(f"query_term = {query_term}")
     # print(f"lang = {lang}")
 
-    tweets = tweepy.Cursor(
-        api.search_tweets, q=query_term, tweet_mode="extended", lang=lang).items(50)   # OPT: compat, lang="en" / "zh"; .items(1) // 2, 5
-    return tweets
+    # get word without hashtag
+    if query_term[0] != "#":
+        word = query_term
+    else:
+        word = query_term[1:]   # remove hastag
+    # print(f"word = {word}")   # D
+
+    # lib = ""
+    request_num = 3   # OPT: 50
+
+    try:   # default is tweepy lib
+        lib = "tweepy"
+        from packages.scrape_tweet_by_tweepy import main
+        out = main(word, request_num, lang)
+    except:  # switch to snscrape lib (if tweepy is down)
+        lib = "snscrape"
+        from packages.scrape_tweet_by_snscrape import main
+        out = main(word, request_num)
+    print(f"=== lib used: {lib} ===")
+
+    output_filename = query_term.replace(" ", "_") + "_" + lib + ".txt"
+    # print(f"=== create file: {output_filename} ===")   # D
+    with open(output_filename, 'w') as f:
+        # print(f"out = {out}")   # D
+        # f.write(f"=== lib used: {lib} ===\n\nout = ")   # OPT: tweet.json()
+        f.write(str(out))   # OPT: tweet.json()
+        f.write('\n')
+        f.flush()
+
+    print(f"OUT: out = {out}")
+    return out
 
 
 def get_text(keyword=None, hashtag=None, lang=None):
@@ -86,9 +97,10 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
         # print(f"tweet.text = {tweet.text}")
         # print(f"tweet.id = {tweet.id}") """
 
-        tweet._json["full_text"]
-        text = tweet._json["full_text"]
-        id = tweet._json["id_str"]   # id
+        # get text & id
+        text = tweet["content"]
+        id = tweet["id"]
+        print(f"HERE: text = {text}")
 
         # words = text.split()   // ONLY work well in en
         # The Tagger object holds state about the dictionary.
