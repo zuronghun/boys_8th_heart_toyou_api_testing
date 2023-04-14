@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 
 # Create your views here.
 # Global variables
-tweet_num = 3   # number of tweet(s) per request
+tweet_num = 50   # number of tweet(s) per request
 lang = "ja"     # language
 
 
@@ -154,7 +154,8 @@ def tweet_list_v1(request):
             except Tweet.DoesNotExist:
                 # get accumulated tweets
                 # get a prev data by default
-                prev_tweets = get_tweets_from_twitter(term)
+                # prev_tweets = get_tweets_from_twitter(term)
+                prev_tweets = []
                 curr_tweets = get_tweets_from_twitter(term)
                 accu_tweets = prev_tweets + curr_tweets   # accumulate prev_tweets w curr data
                 print(f"prev_tweets = {prev_tweets}")   # D
