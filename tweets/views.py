@@ -9,6 +9,9 @@ from tweets.serializers import TweetSerializers
 from rest_framework.decorators import api_view
 
 # Create your views here.
+# Global variables
+tweet_num = 3   # number of tweet(s) per request
+lang = "ja"     # language
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -133,6 +136,8 @@ def tweet_list_v1(request):
     tweets = Tweet.objects.all()
     if request.method == 'POST':
         tweet_data = JSONParser().parse(request)
+
+        # get term
         term = tweet_data['term']   # OPT = あんスタ, あんスタウェルカム祭, はじめてさんいらっしゃ〜い
         # print(f"term = {term}")   # D
 
@@ -143,14 +148,28 @@ def tweet_list_v1(request):
             # if empty, means no found this data
             if len(tweet) < 1:"""
 
-            # find tweet by term
+            # find tweet by term, else create a new tweet
             try:
                 tweet = Tweet.objects.get(term=term)
             except Tweet.DoesNotExist:
+                # get accumulated tweets
+                # get a prev data by default
+                prev_tweets = get_tweets_from_twitter(term)
+                curr_tweets = get_tweets_from_twitter(term)
+                accu_tweets = prev_tweets + curr_tweets   # accumulate prev_tweets w curr data
+                print(f"prev_tweets = {prev_tweets}")   # D
+                print(f"curr_tweets = {curr_tweets}")   # D
+                print(f"accu_tweets = {accu_tweets}")   # D
+
+                # get data
+                # get_data_from_tweets(None, term, lang, prev_tweets)
+                data = get_data_from_tweets(accu_tweets)
+
+                # create new tweet obj
                 tweet_data = dict()
-                data = get_tweet_text(None, term, "ja")
                 tweet_data["term"] = term
                 tweet_data["data"] = data
+                tweet_data["prev_tweets"] = accu_tweets
                 # print(f"tweet_data = {tweet_data}")   # D
 
                 tweet_serializer = TweetSerializers(
@@ -170,20 +189,45 @@ def tweet_list_v1(request):
             # return JsonResponse(tweets_serializers.data, safe=False)
             return JsonResponse(tweet_serializer.data)
 
+    # refresh & update single tweet by its term
     elif request.method == 'GET':
         print("=== cron job is auto running ===")
-        term = request.GET.get('term', None)
-        for tweet in tweets:
-            # refresh & update single tweet by its term
-            term = getattr(tweet, "term")   # OPT: tweet["term"]
-            """ print(f"tweet = {tweet}")   # D
-            print(f"term = {term}") """
 
-            tweet_data = dict()
+        """ # get term   # TODO: remove this code block if unneeded
+        term = request.GET.get('term', None) """
+
+        for tweet in tweets:
+            # print(f"tweet = {tweet}")   # D
+
+            # get term
+            term = getattr(tweet, "term")   # OPT: tweet["term"]
+            # print(f"term = {term}")   # D
+
+            # get accumulated tweets
+            prev_tweets = getattr(tweet, "prev_tweets")
+            if prev_tweets == []:   # handle prev empty list prev_tweets
+                prev_tweets = get_tweets_from_twitter(term)
+            # get the last num_tweet_per_request tweets from prev_tweets (eg. 50 if num_tweet_per_request = 50)
+            """else:
+                prev_tweets = prev_tweets[-tweet_num:]"""
+            curr_tweets = get_tweets_from_twitter(term)
+            # accumulate prev_tweets w curr data
+            accu_tweets = prev_tweets[-tweet_num:] + curr_tweets
+            print(f"prev_tweets = {prev_tweets}")   # D
+            print(f"curr_tweets = {curr_tweets}")   # D
+            print(f"accu_tweets = {accu_tweets}")   # D
+
+            # get data
             # data = {"num666": 123666}
-            data = get_tweet_text(None, term, "ja")
+            # data = get_data_from_tweets(None, term, lang, prev_tweets[-tweet_num:])
+            data = get_data_from_tweets(accu_tweets)
+
+            # update new tweet obj
+            tweet_data = dict()
             tweet_data["term"] = term
             tweet_data["data"] = data
+            # tweet_data["prev_tweets"] = accu_tweets   // it will discard prev value for prev_tweets
+            tweet_data["prev_tweets"] = prev_tweets + curr_tweets
 
             # serialize & save into db
             tweet_serializer = TweetSerializers(
@@ -197,10 +241,22 @@ def tweet_list_v1(request):
 
 
 # _v1 Reusable / small function(s)
+# get tweet
+# def get_tweets_from_twitter(keyword=None, hashtag=None, lang=None):
+def get_tweets_from_twitter(term):
+    from packages.twitter_text import get_tweets
+    keyword = None
+    hashtag = term
+    tweets = get_tweets(keyword, hashtag, lang, tweet_num)
+    return tweets
+
+# get tweet text
 
 
-def get_tweet_text(keyword=None, hashtag=None, lang=None):   # hashtag=アンスタ
+# def get_data_from_tweets(keyword=None, hashtag=None, lang=None, prev_tweets=None):   # hashtag=アンスタ
+def get_data_from_tweets(tweets):
 
-    from packages.twitter_text import get_text_w_title
-    text = get_text_w_title(keyword, hashtag, lang)
+    from packages.twitter_text import get_data
+    # text = get_data(keyword, hashtag, lang, prev_tweets)
+    text = get_data(tweets, lang)
     return text
