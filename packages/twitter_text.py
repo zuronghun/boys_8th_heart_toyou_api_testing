@@ -34,11 +34,11 @@ def get_tweets(keyword=None, hashtag=None, lang=None, tweet_num=None):
         out = main(word, tweet_num)
     # print(f"=== lib used: {lib} ===")   # D
 
-    # TEST CASE: add stopword into text
+    """# TEST CASE: add stopword into text
     for output in out:
         print(f'BFR: output["content"] = {output["content"]}')
         output["content"] += "天城燐音であれば、「天城燐音」「天城」「燐音」など自身の名前は絶対1番ワードクラウド上で大きく表示されてしまうはずなので、各キャラクター自身の名前は表示しないようにしたいです"
-        print(f'AFR: output["content"] = {output["content"]}')
+        print(f'AFR: output["content"] = {output["content"]}')"""
 
     # TODO: create a new folder, namely tweets_backup (if it is no exist yet)
     output_filename = "tweets_backup/" + \
