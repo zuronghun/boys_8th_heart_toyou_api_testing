@@ -1,5 +1,5 @@
-# search 25 tweets by hashtag & 25 by word (if request_num = 50)
-def get_tweets(keyword=None, hashtag=None, lang=None):
+# search tweet_num/2 tweets by hashtag & tweet_num/2 by word (25 if tweet_num = 50)
+def get_tweets(keyword=None, hashtag=None, lang=None, tweet_num=None):
     # query term
     if keyword is not None:
         query_term = keyword
@@ -18,16 +18,18 @@ def get_tweets(keyword=None, hashtag=None, lang=None):
     # print(f"word = {word}")   # D
 
     # lib = ""
-    request_num = 3   # OPT: 50
+    # tweet_num = 3   # OPT: 50
+    if (tweet_num == None):
+        tweet_num = 3
 
     try:   # default is tweepy lib
         lib = "tweepy"
         from packages.scrape_tweet_by_tweepy import main
-        out = main(word, request_num, lang)
+        out = main(word, tweet_num, lang)
     except:  # switch to snscrape lib (if tweepy is down)
         lib = "snscrape"
         from packages.scrape_tweet_by_snscrape import main
-        out = main(word, request_num)
+        out = main(word, tweet_num)
     # print(f"=== lib used: {lib} ===")   # D
 
     # TODO: create a new folder, namely tweets_backup (if it is no exist yet)
@@ -58,7 +60,8 @@ def get_text(keyword=None, hashtag=None, lang=None):
 
 
 # TODO: rename "title" to "content"
-def get_text_w_title(keyword=None, hashtag=None, lang=None):
+# def get_data(keyword=None, hashtag=None, lang=None, prev_data=None):
+def get_data(tweets, lang):
     import fugashi
     from wordcloud import STOPWORDS
 
@@ -83,14 +86,19 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
         text += tweet._json["full_text"]
         # print("text:", text) """
 
-    tweets = get_tweets(keyword, hashtag, lang)
+    """tweets = get_tweets(keyword, hashtag, lang)
+
+    if prev_data is not None:
+        # tweets += prev_data
+        tweets = prev_data + tweets
     # tweets = ["aaa bbb ccc", "bbb ccc ddd", "eee fff ggg"]
-    # print(f"tweets = {tweets}")
+    # print(f"tweets = {tweets}")"""
 
     count_dict = dict()
     titles_dict = dict()
     # tweet id used to get its url (http://twitter.com/twitter/statuses/{id})
     ids_dict = dict()
+    out_dict = dict()
 
     for tweet in tweets:
         """ # print(f"tweet = {tweet}")   # D
@@ -106,7 +114,7 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
 
         # words = text.split()   // ONLY work well in en
         # The Tagger object holds state about the dictionary.
-        tagger = fugashi.Tagger()
+        tagger = fugashi.Tagger()  # type: ignore
         words = [word.surface for word in tagger(text)]
 
         # print(text)
@@ -128,9 +136,18 @@ def get_text_w_title(keyword=None, hashtag=None, lang=None):
             ids = list()   # OPT: set()
 
             if (word in count_dict):
+                # set default value if value is None
                 count = count_dict.get(word)
                 titles = titles_dict.get(word)
                 ids = ids_dict.get(word)
+
+            # use back default value if None
+            if count is None:
+                count = 0
+            if titles is None:
+                titles = list()
+            if ids is None:
+                ids = list()
 
             # print("=====")
             # print(f"BFR: titles = {titles}")
