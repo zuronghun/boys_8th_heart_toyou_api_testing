@@ -40,7 +40,7 @@ def main(term=None, number=None):   # params: term is word without hashtag, requ
             # out.append(tweet_json['content'])
             data = {}
             data['content'] = tweet_json['content']
-            data['id'] = tweet_json['id']
+            data['id'] = str(tweet_json['id'])   # chg num to str type
             out.append(data)
             # print(f"\n{i}) Scraped tweet: {tweet_json}")   # D
             # print(f"\n{i}) Scraped tweet: {tweet_json['content']}")   # D
