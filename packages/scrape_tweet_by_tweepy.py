@@ -38,8 +38,10 @@ def main(term=None, number=None, lang=None):
     item_num = number / 2
     """ print(f"hashtag: math.ceil(item_num) = {math.ceil(item_num)}")   # D
     print(f"word: math.floor(item_num) = {math.floor(item_num)}") """
+    query = "(" + hashtag + " AND #あんスタ)"
     tweets = tweepy.Cursor(
-        api.search_tweets, q=hashtag, tweet_mode="extended", lang=lang).items(math.ceil(item_num))   # OPT: compat, lang="en" / "zh"; .items(1)
+        # api.search_tweets, q=hashtag, tweet_mode="extended", lang=lang).items(math.ceil(item_num))   # OPT: compat, lang="en" / "zh"; .items(1)
+        api.search_tweets, q=query, tweet_mode="extended", lang=lang).items(math.ceil(item_num))
     # out += tweets
     # get content & id col data only
     for tweet in tweets:   # TODO: remove redundant
@@ -53,8 +55,9 @@ def main(term=None, number=None, lang=None):
     # print(f"hashtag: tweets = {tweets}")   # D
 
     # get tweet by word
+    query = "(" + term + " AND あんスタ)"
     tweets = tweepy.Cursor(
-        api.search_tweets, q=term, tweet_mode="extended", lang=lang).items(math.floor(item_num))   # OPT: compat, lang="en" / "zh"; .items(1) // 2, 5
+        api.search_tweets, q=query, tweet_mode="extended", lang=lang).items(math.floor(item_num))   # OPT: compat, lang="en" / "zh"; .items(1) // 2, 5
     # out += tweets
     # get content & id col data only
     for tweet in tweets:
