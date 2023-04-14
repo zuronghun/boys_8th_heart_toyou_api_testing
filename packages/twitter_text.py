@@ -164,6 +164,10 @@ def get_data(tweets, lang):
                 # print(f"this word {word} is a stopword")
                 continue"""
 
+            # remove word if it has only one character
+            if len(list(word)) <= 2:
+                continue
+
             # count_dict[word] = ((word in count_dict) ? count_dict.get(word) : 0) + 1
             count = 0   # counter start from 0 by default
             titles = list()   # OPT: set()
