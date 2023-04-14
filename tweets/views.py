@@ -46,7 +46,7 @@ def tweet_list(request):
     # delete all Tweets from database
     elif request.method == 'DELETE':
         count = Tweet.objects.all().delete()
-        print(f"count = {count}")   # DEBUG
+        # print(f"count = {count}")   # DEBUG
         return JsonResponse({'message': '{} Tweets were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -97,9 +97,9 @@ def tweet_detail(request, pk):
     # update an object
     # update a Tweet by the id in the request
     elif request.method == 'PUT':
-        print(f"HERE: request = {request}")
+        # print(f"HERE: request = {request}")
         tweet_data = JSONParser().parse(request)
-        print(f"HERE: tweet_data = {tweet_data}")
+        # print(f"HERE: tweet_data = {tweet_data}")
         tweet_serializer = TweetSerializers(tweet, data=tweet_data)
         if tweet_serializer.is_valid():
             tweet_serializer.save()
@@ -158,9 +158,9 @@ def tweet_list_v1(request):
                 prev_tweets = []
                 curr_tweets = get_tweets_from_twitter(term)
                 accu_tweets = prev_tweets + curr_tweets   # accumulate prev_tweets w curr data
-                print(f"prev_tweets = {prev_tweets}")   # D
-                print(f"curr_tweets = {curr_tweets}")   # D
-                print(f"accu_tweets = {accu_tweets}")   # D
+                # print(f"prev_tweets = {prev_tweets}")   # D
+                # print(f"curr_tweets = {curr_tweets}")   # D
+                # print(f"accu_tweets = {accu_tweets}")   # D
 
                 # get data
                 # get_data_from_tweets(None, term, lang, prev_tweets)
@@ -214,9 +214,9 @@ def tweet_list_v1(request):
             curr_tweets = get_tweets_from_twitter(term)
             # accumulate prev_tweets w curr data
             accu_tweets = prev_tweets[-tweet_num:] + curr_tweets
-            print(f"prev_tweets = {prev_tweets}")   # D
-            print(f"curr_tweets = {curr_tweets}")   # D
-            print(f"accu_tweets = {accu_tweets}")   # D
+            # print(f"prev_tweets = {prev_tweets}")   # D
+            # print(f"curr_tweets = {curr_tweets}")   # D
+            # print(f"accu_tweets = {accu_tweets}")   # D
 
             # get data
             # data = {"num666": 123666}
