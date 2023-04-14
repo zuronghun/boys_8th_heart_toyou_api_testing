@@ -43,6 +43,8 @@ def main(term=None, number=None, lang=None):
     for tweet in tweets:   # TODO: remove redundant
         data = {}
         # OPT: tweet['content']
+        """# TEST CASE: test server down 500 # TODO: test w wrong credentail
+        data['content'] = tweet['content']"""
         data['content'] = tweet._json["full_text"]   # OPT: tweet['content']
         data['id'] = tweet._json["id_str"]   # OPT: tweet['id']
         out.append(data)
