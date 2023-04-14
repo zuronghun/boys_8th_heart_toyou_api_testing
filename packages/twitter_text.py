@@ -18,6 +18,8 @@ def get_tweets(keyword=None, hashtag=None, lang=None, tweet_num=None):
     # print(f"word = {word}")   # D
 
     # lib = ""
+
+    # set default value for tweet_num
     # tweet_num = 3   # OPT: 50
     if (tweet_num == None):
         tweet_num = 3
