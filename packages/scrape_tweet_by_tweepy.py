@@ -18,6 +18,8 @@ def main(term=None, number=None, lang=None):
     out = []
 
     # set credentials
+    """# TEST CASE: test w wrong credentail
+    consumer_key = "q1BwFxmCRcLt21Wwx33zXqQVR666"   # same as api key"""
     consumer_key = "q1BwFxmCRcLt21Wwx33zXqQVR"   # same as api key
     # same as api secret
     consumer_secret = "rjMIMoYhoOVg6K1wnFEi8vtMtn64hPZChHXDh8JxmcR0Sx9Myg"
@@ -43,7 +45,7 @@ def main(term=None, number=None, lang=None):
     for tweet in tweets:   # TODO: remove redundant
         data = {}
         # OPT: tweet['content']
-        """# TEST CASE: test server down w code 500 # TODO: test w wrong credentail
+        """# TEST CASE: test server down w code 500
         data['content'] = tweet['content']"""
         data['content'] = tweet._json["full_text"]   # OPT: tweet['content']
         data['id'] = tweet._json["id_str"]   # OPT: tweet['id']
