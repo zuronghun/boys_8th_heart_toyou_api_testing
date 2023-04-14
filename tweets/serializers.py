@@ -9,4 +9,4 @@ class TweetSerializers(serializers.ModelSerializer):
         fields = ('id',
                   'term',
                   'data',
-                  'prev_data')
+                  'prev_tweets')
