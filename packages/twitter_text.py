@@ -165,7 +165,7 @@ def get_data(tweets, lang):
                 continue"""
 
             # remove word if it has only one character
-            if len(list(word)) <= 2:
+            if len(list(word)) < 2:
                 continue
 
             # count_dict[word] = ((word in count_dict) ? count_dict.get(word) : 0) + 1
