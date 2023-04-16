@@ -67,7 +67,6 @@ def main(term=None, number=None, lang=None):
     for tweet in tweets:
         data = {}
         data['content'] = tweet._json["full_text"]
-        data['author_id'] = tweet._json["author_id"]   # OPT: tweet['author_id']
         data['id'] = str(tweet._json["id_str"])   # OPT: tweet['id']
         out.append(data)
     # print(f"word: tweets = {tweets}")   # D
