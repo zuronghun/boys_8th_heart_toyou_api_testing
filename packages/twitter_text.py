@@ -138,7 +138,8 @@ def get_data(tweets, lang):
 
         # get text & id
         text = tweet["content"]
-        id = tweet["id"]
+        # make id is in string type (return either str or int type)
+        id = str(tweet["id"])
         # print(f"HERE: text = {text}")
 
         # remove stop bfr split sentence into words

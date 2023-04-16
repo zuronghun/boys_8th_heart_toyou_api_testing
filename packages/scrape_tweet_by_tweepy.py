@@ -54,7 +54,7 @@ def main(term=None, number=None, lang=None):
         """# TEST CASE: test server down w code 500
         data['content'] = tweet['content']"""
         data['content'] = tweet._json["full_text"]   # OPT: tweet['content']
-        data['id'] = tweet._json["id_str"]   # OPT: tweet['id']
+        data['id'] = str(tweet._json["id_str"])   # OPT: tweet['id']
         out.append(data)
     # print(f"hashtag: tweets = {tweets}")   # D
 
