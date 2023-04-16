@@ -7,7 +7,7 @@ import math   # ceil & floor num
 def main(term=None, number=None, lang=None):
     # set default value
     if term is None:
-        term = '#あんスタ'
+        term = 'あんスタ'
     if number is None:
         number = 3
 
@@ -41,7 +41,8 @@ def main(term=None, number=None, lang=None):
     item_num = number / 2
     """ print(f"hashtag: math.ceil(item_num) = {math.ceil(item_num)}")   # D
     print(f"word: math.floor(item_num) = {math.floor(item_num)}") """
-    query = "(" + hashtag + " OR #あんスタ OR " + whiteList + ")"
+    # query = "(" + hashtag + " OR #あんスタ OR " + whiteList + ")"
+    query = "(" + hashtag + " OR #あんスタ " + ")"
     tweets = tweepy.Cursor(
         # api.search_tweets, q=hashtag, tweet_mode="extended", lang=lang).items(math.ceil(item_num))   # OPT: compat, lang="en" / "zh"; .items(1)
         api.search_tweets, q=query, tweet_mode="extended", lang=lang).items(math.ceil(item_num))
