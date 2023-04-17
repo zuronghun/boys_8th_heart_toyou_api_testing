@@ -86,12 +86,12 @@ def main(term=None, number=None, lang=None):
     # 1) get tweet by hashtag
     """ print(f"hashtag: math.ceil(item_num) = {math.ceil(item_num)}")   # D
     print(f"word: math.floor(item_num) = {math.floor(item_num)}") """
-    # query = "(" + hashtag + " AND #" + subTerm +" OR " + whiteList + ")"
-    # query = "(" + hashtag + " AND #" + subTerm +" OR " + ")"
-    query = "(" + hashtag + " AND #" + subTerm + "" + whiteListQuery + ")"
+    # query = "(" + hashtag + " AND #" + subTerm + " OR " + whiteList + ")"
+    # query = "(" + hashtag + " AND #" + subTerm + " OR " + ")"
+    query = "(" + hashtag + " AND #" + subTerm + whiteListQuery + ")"
     queryNItemNum[query] = math.ceil(item_num)   # add data into dict
     # 2) get tweet by word
-    query = "(" + term + " AND " + subTerm + "" + whiteListQuery + ")"
+    query = "(" + term + " AND " + subTerm + whiteListQuery + ")"
     queryNItemNum[query] = math.floor(item_num)   # add data into dict
     print(f"queryNItemNum = {queryNItemNum}")
 
