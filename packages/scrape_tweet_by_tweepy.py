@@ -82,7 +82,7 @@ def main(term=None, number=None, lang=None):
     print(f"whiteListQuery = {whiteListQuery}")   # D
 
     # get queryNItemNum
-    subTerm = "#あんスタウェルカム祭"   # OPT: #あんスタ
+    subTerm = "あんスタウェルカム祭"   # OPT: あんスタ
     # 1) get tweet by hashtag
     """ print(f"hashtag: math.ceil(item_num) = {math.ceil(item_num)}")   # D
     print(f"word: math.floor(item_num) = {math.floor(item_num)}") """
@@ -117,7 +117,8 @@ def main(term=None, number=None, lang=None):
 
         if (tweet_num > length):
             # update param
-            tweet_query = tweet_query.replace(" AND (", " OR (")
+            # tweet_query = tweet_query.replace(" AND (", " OR (")
+            tweet_query = tweet_query.replace("AND", "OR")
             tweet_num = tweet_num - length
             print(f"tweet_query = {tweet_query}")
             print(f"tweet_num = {tweet_num}")
