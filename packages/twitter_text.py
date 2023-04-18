@@ -71,10 +71,11 @@ def get_text(keyword=None, hashtag=None, lang=None):
 # def get_data(keyword=None, hashtag=None, lang=None, prev_data=None):
 def get_data(tweets, lang):
     import fugashi
-    from wordcloud import STOPWORDS
+    # from wordcloud import STOPWORDS
 
     # create stopword list:
-    stopwordSet = set(STOPWORDS)   # maybe can set at outer level # use "set" type to avoid duplicate data
+    # stopwordSet = set(STOPWORDS)   # maybe can set at outer level # use "set" type to avoid duplicate data
+    stopwordSet = set()
     if lang == "en":
         stopwordSet.update(["drink", "now", "wine", "flavor", "flavors"])
     elif lang == "ja":
